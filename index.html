@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Cursos AESP</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100%;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: inherit;
+    }
+
+    .app-container {
+      width: 100%;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      width: 100%;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+
+    .header p {
+      margin: 0;
+      font-size: 1.2rem;
+      opacity: 0.95;
+    }
+
+    .main-content {
+      flex: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .breadcrumb {
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+      color: #666;
+      cursor: pointer;
+    }
+
+    .breadcrumb:hover {
+      color: #1e3c72;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      color: #1e3c72;
+      margin-bottom: 2rem;
+      font-weight: 600;
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .category-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+      border-color: #1e3c72;
+    }
+
+    .category-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .category-card h3 {
+      margin: 0 0 0.5rem 0;
+      color: #1e3c72;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .category-card p {
+      margin: 0;
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .course-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #1e3c72;
+      transition: all 0.2s ease;
+    }
+
+    .course-card:hover {
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      transform: translateX(5px);
+    }
+
+    .course-card h4 {
+      margin: 0 0 1rem 0;
+      color: #1e3c72;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .course-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .course-detail {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .course-icon {
+      font-size: 1.1rem;
+    }
+
+    .footer {
+      width: 100%;
+      background: #1e3c72;
+      color: white;
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: auto;
+    }
+
+    .footer p {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .header p {
+        font-size: 1rem;
+      }
+
+      .main-content {
+        padding: 2rem 1rem;
+      }
+
+      .categories-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .courses-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <style>
+    @view-transition {
+      navigation: auto;
+    }
+  </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+</head>
+
+<body>
+  <div class="app-container">
+    <header class="header">
+      <h1 id="site-title">Academia Estadual de Segurança Pública</h1>
+      <p id="site-subtitle">Portal de Cursos e Capacitação</p>
+    </header>
+    <main class="main-content"><!-- Página de Categorias -->
+      <div id="categories-page">
+        <h2 class="page-title">Escolha uma Categoria</h2>
+        <div class="categories-grid">
+          <div class="category-card" data-category="servicos-penais">
+            <div class="category-icon">
+              🏛️
+            </div>
+            <h3 id="category-1-title">Escola Estadual de Serviços Penais</h3>
+            <p>Cursos de formação e capacitação em serviços penitenciários</p>
+          </div>
+          <div class="category-card" data-category="socioeducacao">
+            <div class="category-icon">
+              👥
+            </div>
+            <h3 id="category-2-title">Escola Estadual de Socioeducação</h3>
+            <p>Formação em medidas socioeducativas e atendimento ao adolescente</p>
+          </div>
+          <div class="category-card" data-category="temas-transversais">
+            <div class="category-icon">
+              🎓
+            </div>
+            <h3 id="category-3-title">Temas Transversais</h3>
+            <p>Cursos interdisciplinares e temas gerais de segurança pública</p>
+          </div>
+          <div class="category-card" data-category="seminarios">
+            <div class="category-icon">
+              📅
+            </div>
+            <h3 id="category-4-title">Seminários/Eventos</h3>
+            <p>Encontros, palestras e eventos de atualização profissional</p>
+          </div>
+        </div>
+      </div><!-- Página de Cursos -->
+      <div id="courses-page" class="hidden">
+        <div class="breadcrumb" id="back-button">
+          ← Voltar para Categorias
+        </div>
+        <h2 class="page-title" id="category-title"></h2>
+        <div class="courses-grid" id="courses-container"></div>
+      </div>
+    </main>
+    <footer class="footer">
+      <p id="footer-text">© 2024 Academia Estadual de Segurança Pública - Todos os direitos reservados</p>
+    </footer>
+  </div>
+  <script>
+    const defaultConfig = {
+      site_title: "Academia Estadual de Segurança Pública",
+      site_subtitle: "Portal de Cursos e Capacitação",
+      category_1_title: "Escola Estadual de Serviços Penais",
+      category_2_title: "Escola Estadual de Socioeducação",
+      category_3_title: "Temas Transversais",
+      category_4_title: "Seminários/Eventos",
+      footer_text: "© 2024 Academia Estadual de Segurança Pública - Todos os direitos reservados"
+    };
+
+    const coursesData = {
+      'servicos-penais': [
+        { name: "APH - Atendimento Pré - Hospitalar em Combate - Protocolo - Marc1", hours: "12h", date: "02/12/2025" },
+        { name: "Defesa Pessoal Policial - DPP", hours: "30h", date: "02/12 a 04/12/2025" },
+        { name: "Defesa Pessoal Policial - DPP", hours: "30h", date: "02/12 a 04/12/2025" },
+        { name: "Nivelamento Operacional de Polícia Penal - NOPP", hours: "30h", date: "09/12 a 11/12/2025" },
+        { name: "Nivelamento Operacional de Polícia Penal - NOPP", hours: "30h", date: "09/12 a 11/12/2025" },
+        { name: "Treinamento com Arma de Fogo - TCAF - Espingarda", hours: "12h", date: "10/12/2025" },
+        { name: "Treinamento com Arma de Fogo - TCAF - Espingarda", hours: "12h", date: "11/12/2025" },
+        { name: "Treinamento com Arma de Fogo - TCAF - Espingarda", hours: "12h", date: "10/12/2025" },
+        { name: "Treinamento com Arma de Fogo - TCAF - Espingarda", hours: "12h", date: "11/12/2025" },
+        { name: "Treinamento com Arma de Fogo - TCAF - Espingarda", hours: "12h", date: "12/12/2025" },
+        { name: "Treinamento Prisional Básico - TPB - Módulo II", hours: "40h", date: "15/12 a 19/12/2025" },
+        { name: "Uso e Manuseio Seguro de Arma de Fogo Fora do Ambiente de Trabalho", hours: "15h", date: "01/12 a 17/12/2025" }
+      ],
+      'socioeducacao': [
+        { name: "Controle de Acesso à Unidade Socioeducativa", hours: "8h", date: "09/12/2025" },
+        { name: "Notificação de Violência Interpessoal e Autoprovocada no Sistema Socioeducativo", hours: "10h", date: "03/12 a 13/12/2025" },
+        { name: "Painel Suase", hours: "8h", date: "03/12 a 13/12/2025" },
+        { name: "Prevenção e Combate a Incêndios", hours: "8h", date: "10/12/2025" },
+        { name: "Procedimento de Revista no Sistema Socioeducativo", hours: "8h", date: "11/12/2025" },
+        { name: "Seminário: Família, Rede e Território: Fortalecendo Vínculos para a Socioeducação Efetiva", hours: "8h", date: "03/12/2025" },
+        { name: "Simpósio de Segurança Socioeducativa na Internação", hours: "8h", date: "04/12/2025" },
+        { name: "Sobrevivência Administrativa: a legalidade do trabalho do Agente de Segurança Socioeducativo", hours: "10h", date: "03/12 a 13/12/2025" },
+        { name: "Transporte de Adolescentes e Jovens no Sistema Socioeducativo", hours: "8h", date: "12/12/2025" }
+      ],
+      'temas-transversais': [
+        { name: "Contexto Histórico do Sistema Prisional de Minas Gerais", hours: "10h", date: "01/12 a 15/12/2025" },
+        { name: "Excel Avançado", hours: "10h", date: "01/12 a 17/12/2025" },
+        { name: "Relacionamento Interpessoal no Trabalho", hours: "12h", date: "01/12 a 17/12/2025" }
+      ],
+      'seminarios': [
+        { name: "Seminário de Segurança Pública 2025", hours: "8h", date: "10/01/2025" },
+        { name: "Encontro Nacional de Gestores", hours: "16h", date: "30/01/2025" },
+        { name: "Workshop: Inovação na Gestão", hours: "12h", date: "14/02/2025" },
+        { name: "Congresso Estadual de Segurança", hours: "24h", date: "25/02/2025" }
+      ]
+    };
+
+    let currentCategory = null;
+
+    async function onConfigChange(config) {
+      document.getElementById('site-title').textContent = config.site_title || defaultConfig.site_title;
+      document.getElementById('site-subtitle').textContent = config.site_subtitle || defaultConfig.site_subtitle;
+      document.getElementById('category-1-title').textContent = config.category_1_title || defaultConfig.category_1_title;
+      document.getElementById('category-2-title').textContent = config.category_2_title || defaultConfig.category_2_title;
+      document.getElementById('category-3-title').textContent = config.category_3_title || defaultConfig.category_3_title;
+      document.getElementById('category-4-title').textContent = config.category_4_title || defaultConfig.category_4_title;
+      document.getElementById('footer-text').textContent = config.footer_text || defaultConfig.footer_text;
+    }
+
+    function showCourses(category) {
+      currentCategory = category;
+      const categoryTitles = {
+        'servicos-penais': document.getElementById('category-1-title').textContent,
+        'socioeducacao': document.getElementById('category-2-title').textContent,
+        'temas-transversais': document.getElementById('category-3-title').textContent,
+        'seminarios': document.getElementById('category-4-title').textContent
+      };
+
+      document.getElementById('category-title').textContent = categoryTitles[category];
+
+      const coursesContainer = document.getElementById('courses-container');
+      coursesContainer.innerHTML = '';
+
+      const courses = coursesData[category];
+      courses.forEach(course => {
+        const courseCard = document.createElement('div');
+        courseCard.className = 'course-card';
+        courseCard.innerHTML = `
+          <h4>${course.name}</h4>
+          <div class="course-info">
+            <div class="course-detail">
+              <span class="course-icon">⏱️</span>
+              <span>Carga Horária: ${course.hours}</span>
+            </div>
+            <div class="course-detail">
+              <span class="course-icon">📅</span>
+              <span>Data: ${course.date}</span>
+            </div>
+          </div>
+        `;
+        coursesContainer.appendChild(courseCard);
+      });
+
+      document.getElementById('categories-page').classList.add('hidden');
+      document.getElementById('courses-page').classList.remove('hidden');
+    }
+
+    function showCategories() {
+      document.getElementById('courses-page').classList.add('hidden');
+      document.getElementById('categories-page').classList.remove('hidden');
+      currentCategory = null;
+    }
+
+    // No início do seu <script>, adicione:
+    document.addEventListener('DOMContentLoaded', function () {
+      // Detecta se está dentro de um iframe (como no Moodle)
+      if (window.self !== window.top) {
+        // Ajusta estilos para iframe
+        document.body.style.minHeight = '600px';
+        document.querySelector('.app-container').style.minHeight = '600px';
+
+        // Remove footer se quiser economizar espaço
+        // document.querySelector('.footer').style.display = 'none';
+      }
+    });
+
+    document.querySelectorAll('.category-card').forEach(card => {
+      card.addEventListener('click', function () {
+        const category = this.getAttribute('data-category');
+        showCourses(category);
+      });
+    });
+
+    document.getElementById('back-button').addEventListener('click', showCategories);
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["site_title", config.site_title || defaultConfig.site_title],
+          ["site_subtitle", config.site_subtitle || defaultConfig.site_subtitle],
+          ["category_1_title", config.category_1_title || defaultConfig.category_1_title],
+          ["category_2_title", config.category_2_title || defaultConfig.category_2_title],
+          ["category_3_title", config.category_3_title || defaultConfig.category_3_title],
+          ["category_4_title", config.category_4_title || defaultConfig.category_4_title],
+          ["footer_text", config.footer_text || defaultConfig.footer_text]
+        ])
+      });
+    }
+
+    onConfigChange(window.elementSdk?.config || defaultConfig);
+  </script>
+  <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9a854f31f1c16e30',t:'MTc2NDc4ODQ1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
+</html>
